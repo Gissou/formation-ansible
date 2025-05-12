@@ -5,23 +5,23 @@
 
   tasks:
     - name: Installer Apache2
-      apt:
+      ansible.builtin.apt:
         name: apache2
         state: present
 
     - name: Démarrer et activer Apache2
-      service:
+      ansible.builtin.service:
         name: apache2
         state: started
         enabled: yes
 
     - name: Créer un répertoire pour le site web
-      file:
+      ansible.builtin.file:
         path: /var/www/html
         state: directory
 
     - name: Copier un fichier HTML de base
-      copy:
+      ansible.builtin.copy:
         dest: /var/www/html/index.html
         content: |
           <html>
