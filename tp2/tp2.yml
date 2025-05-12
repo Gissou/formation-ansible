@@ -1,0 +1,45 @@
+---
+- name: Configuration du tp2
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Installer machine 1 et 2
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: 
+        - apache2
+        - mysql-server
+      when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
+      
+    - name: Démarrer et activer les services machine 1 et 2
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop: 
+        - apache2
+        - mysql
+      when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
+      
+    - name: Installer machine 3
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: 
+        - git
+        - nginx
+        - cowsay
+      when: ansible_hostname == "node03"
+      
+    - name: Démarrer et activer machine 3
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop: 
+        - nginx
+      when: (ansible_hostname == "node03")
+      
+
