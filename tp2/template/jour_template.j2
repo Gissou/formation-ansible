@@ -1,0 +1,16 @@
+{% set current_hour = now().hour %}
+{% set current_day = now().day %}
+
+{% if current_day % 2 == 0 %}
+    {% if current_hour >= 12 %}
+        pair et plus tard que midi
+    {% else %}
+        pair et avant midi
+    {% endif %}
+{% else %}
+    {% if current_hour >= 12 %}
+        impair et plus tard que midi
+    {% else %}
+        impair et avant midi
+    {% endif %}
+{% endif %}

@@ -47,7 +47,9 @@
       loop: 
         - apache2
         - mysql
-      when: (ansible_hostname == "node01" or ansible_hostname == "node02") and 'apache2' in ansible_facts.packages
+      when: 
+        - (ansible_hostname == "node01" or ansible_hostname == "node02")
+        - "'apache2' in ansible_facts.packages"
       
     - name: Démarrer et activer machine 3
       ansible.builtin.service:
@@ -56,19 +58,30 @@
         enabled: yes
       loop: 
         - nginx
-      when: ansible_hostname == "node03" and 'nginx' in ansible_facts.packages
+      when: 
+        - ansible_hostname == "node03"
+        - "'nginx' in ansible_facts.packages"
       
     - name: Installer ufw sur Ubuntu
-      apt:
+      ansible.builtin.apt:
         name: ufw
         state: present
       when: ansible_distribution == "Ubuntu"
 
     - name: Installer sl sur Debian
-      apt:
+      ansible.builtin.apt:
         name: sl
         state: present
       when: ansible_distribution == "Debian"
+      
+    - name: Obtenir la date et l'heure actuelles
+      ansible.builtin.setup:
+        filter: ansible_date_time
+        
+    - name: Générer le fichier /etc/jour à partir du template
+      template:
+        src: template/jour_template.j2
+        dest: /etc/jour
 
 
       
