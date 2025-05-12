@@ -4,14 +4,40 @@
   become: yes
 
   tasks:
+    - name: Mettre à jour l'index des paquets
+      ansible.builtin.apt:
+        update_cache: yes
+        
     - name: Installer machine 1 et 2
       ansible.builtin.apt:
         name: "{{ item }}"
-        state: present
+        state: latest
       loop: 
         - apache2
         - mysql-server
+      register: echo
       when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
+      
+    - name: Installer machine 3
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+      loop: 
+        - git
+        - nginx
+        - cowsay
+      when: ansible_hostname == "node03"
+      
+    - name: Vérifier si packages installés
+      package_facts:
+        manager: auto
+      
+    - name: Copier un fichier HTML de base
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          Bonjour depuis Ansible sur machine {{ansible_hostname}}
+      when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
       
     - name: Démarrer et activer les services machine 1 et 2
       ansible.builtin.service:
@@ -21,17 +47,7 @@
       loop: 
         - apache2
         - mysql
-      when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
-      
-    - name: Installer machine 3
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      loop: 
-        - git
-        - nginx
-        - cowsay
-      when: ansible_hostname == "node03"
+      when: (ansible_hostname == "node01" or ansible_hostname == "node02") and 'apache2' in ansible_facts.packages
       
     - name: Démarrer et activer machine 3
       ansible.builtin.service:
@@ -40,6 +56,20 @@
         enabled: yes
       loop: 
         - nginx
-      when: (ansible_hostname == "node03")
+      when: ansible_hostname == "node03" and 'nginx' in ansible_facts.packages
+      
+    - name: Installer ufw sur Ubuntu
+      apt:
+        name: ufw
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Installer sl sur Debian
+      apt:
+        name: sl
+        state: present
+      when: ansible_distribution == "Debian"
+
+
       
 
