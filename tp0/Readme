@@ -1,0 +1,1 @@
+ansible-playbook -i formation-ansible/tp0/host.yml formation-ansible/tp0/tp0.yml
