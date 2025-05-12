@@ -1,0 +1,15 @@
+---
+- name: Configuration du tp0
+  hosts: all
+  become: true
+  vars:
+    package_name: "vim"
+  tasks:
+    - name: Installer le paquet vim
+      apt:
+        name: "{{ package_name }}"
+        state: present
+    - name: Vérifier la présence du fichier /etc/passwd
+      file:
+        path: /etc/passwd
+
