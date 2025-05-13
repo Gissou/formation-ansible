@@ -1,0 +1,2 @@
+ansible-playbook -i formation-ansible/tp5/hosts.yml formation-ansible/tp5/tp5.yml --ask-vault-pass
+

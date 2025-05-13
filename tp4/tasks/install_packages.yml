@@ -4,11 +4,14 @@
     name: geerlingguy.apache
   vars:
     apache_listen_port: 88
-  when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
 
 - name: Copier un fichier HTML de base
   ansible.builtin.copy:
     dest: /var/www/html/index.html
     content: |
       Bonjour depuis Ansible sur machine {{ ansible_hostname }}
+
+- name: Installer mysql via un role
+  ansible.builtin.include_role:
+    name: geerlingguy.mysql
 

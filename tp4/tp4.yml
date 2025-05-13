@@ -1,6 +1,6 @@
 ---
 - name: Configuration du tp4
-  hosts: all
+  hosts: webservers
   become: yes
   #vars_files:
   #  - vars/apache.yml
