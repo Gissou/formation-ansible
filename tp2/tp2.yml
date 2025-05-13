@@ -78,6 +78,7 @@
       template:
         src: template/jour_template.j2
         dest: /etc/jour
+        mode: '0644'
 
 
       
