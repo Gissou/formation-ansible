@@ -1,0 +1,10 @@
+---
+- name: Supprimer les packages
+  ansible.builtin.apt:
+    name:
+      - nginx
+      - cowsay
+      - apache2
+      - mysql-server
+    state: absent
+    autoremove: yes

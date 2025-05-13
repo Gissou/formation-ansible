@@ -1,0 +1,77 @@
+---
+- name: Mettre à jour l'index des paquets
+  ansible.builtin.apt:
+    update_cache: yes
+        
+- name: Installer machine 1 et 2
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  loop: 
+    - apache2
+    - mysql-server
+  register: echo
+  when: (ansible_hostname == "node01") or (ansible_hostname == "node02")
+      
+- name: Installer machine 3
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  loop: 
+    - git
+    - nginx
+    - cowsay
+  when: ansible_hostname == "node03"
+     
+- name: Vérifier si packages installés
+  package_facts:
+    manager: auto
+      
+- name: Copier un fichier HTML de base
+  ansible.builtin.copy:
+    dest: /var/www/html/index.html
+    content: |
+      Bonjour depuis Ansible sur machine {{ansible_hostname}}
+  when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+      
+- name: Démarrer et activer les services machine 1 et 2
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: 
+    - apache2
+    - mysql
+  when: 
+    - (ansible_hostname == "node01" or ansible_hostname == "node02")
+    - "'apache2' in ansible_facts.packages"
+      
+- name: Démarrer et activer machine 3
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: 
+    - nginx
+  when: 
+    - ansible_hostname == "node03"
+    - "'nginx' in ansible_facts.packages"
+      
+- name: Installer ufw sur Ubuntu
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Installer sl sur Debian
+  ansible.builtin.apt:
+    name: sl
+    state: present
+  when: ansible_distribution == "Debian"
+        
+- name: Générer le fichier /etc/jour à partir du template
+  template:
+    src: template/jour_template.j2
+    dest: /etc/jour
+    mode: '0644'
+

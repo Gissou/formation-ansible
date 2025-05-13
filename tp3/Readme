@@ -1,0 +1,3 @@
+ansible-galaxy install -r formation-ansible/tp3/requirements.yml
+
+ansible-playbook -i formation-ansible/tp3/hosts.yml formation-ansible/tp3/tp3.yml
