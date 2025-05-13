@@ -73,10 +73,6 @@
         name: sl
         state: present
       when: ansible_distribution == "Debian"
-      
-    - name: Obtenir la date et l'heure actuelles
-      ansible.builtin.setup:
-        filter: ansible_date_time
         
     - name: Générer le fichier /etc/jour à partir du template
       template:
