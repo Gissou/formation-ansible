@@ -8,4 +8,3 @@
       - apache2
       - mysql-server
     state: absent
-    autoremove: yes

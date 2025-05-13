@@ -2,12 +2,15 @@
 - name: Configuration du tp4
   hosts: all
   become: yes
+  #vars_files:
+  #  - vars/apache.yml
   tasks:
     - name: Suppression des packages
       include_tasks: tasks/remove_packages.yml
       
     - name: Installation des packages
       include_tasks: tasks/install_packages.yml
+      tags: install
 
 
 
