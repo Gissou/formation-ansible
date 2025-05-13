@@ -1,6 +1,7 @@
 ---
 - name: Supprimer les packages
   ansible.builtin.apt:
+    update_cache: true
     name:
       - nginx
       - cowsay
