@@ -2,11 +2,12 @@
 - name: Installer et configurer mysql
   hosts: dbservers
   become: yes
-  tasks:
-    - name: Include db vars
-      ansible.builtin.include_vars:
-        file: vars/db.yml
-        
+  
+  vars_files:
+    - vars/main.yml
+    - vars/db.yml
+    
+  tasks:        
     - name: Installer mysql via un role
       ansible.builtin.include_role:
         name: geerlingguy.mysql

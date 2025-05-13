@@ -1,0 +1,12 @@
+mysql_user_home: "/user01"
+mysql_user_name: "user01"
+
+mysql_databases:
+  - name: db01
+    encoding: latin1
+    collation: latin1_general_ci
+mysql_users:
+  - name: user01
+    host: "%"
+    password: similarly-secure-password
+    priv: "db01.*:ALL"
